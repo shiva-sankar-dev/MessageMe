@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MESSAGEME</title>
+</head>
+<body>
+    <div class="parent">
+        <div class="child">
+            <h1 style="font-weight:900;">Enter Room</h1>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <label for="">Username</label><br>
+                <input type="text" placeholder="Username" name="username" required><br>
+                <label for="">Room name</label><br>
+                <input type="text" placeholder="room name" name="room" required><br>
+                <center><button type="submit">Submit</button></center><br>
+            </form>
+        </div>
+    </div>
+</body>
+<style>
+    :root{
+        --shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+    }
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.parent {
+    background-color: rgba(232,233,239,1);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.child {
+    display: flex;
+    background-color: white;
+    height: 50vh;
+    width: 40%;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 100px;
+    box-shadow: var(--shadow);
+}
+
+form {
+    width: 80%;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid dodgerblue;
+    width: 100%;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+input:focus{
+    border-color: rgba(75, 95, 172, 1);
+    outline: none;
+}
+
+button {
+    background-color:rgba(75, 95, 172, 1);
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 20%;
+    cursor: pointer;
+}
+
+
+</style>
+</html>

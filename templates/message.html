@@ -103,6 +103,7 @@
         .message {
             max-height: 500px;  
             overflow-y: auto;
+            overflow-x: hidden;
         }
     
         .chat-body .message .receive {
@@ -112,9 +113,21 @@
             word-spacing: normal;
             border-radius: 10px;
             padding: 10px;
-            margin-bottom: 10px;            
+            margin-bottom: 2px;            
             align-self: flex-start;
+            position: relative;
         }
+
+        .chat-body .message .receive::before{
+            content: " ";
+            bottom: 0;
+            left: -10px;
+            position: absolute;
+            height: 10px;
+            width: 20px;
+            background: linear-gradient(300deg,rgb(255, 255, 255) 0%,rgb(255, 255, 255) 50%, transparent 50%, transparent);            
+        }
+
         .chat-body .message .send{
             background-color:rgb(156, 218, 179);
             max-width: 320px;
@@ -124,8 +137,19 @@
             word-spacing: normal;
             align-self: flex-end;
             margin-bottom: 10px;
+            position: relative;
         }
 
+        
+        .chat-body .message .send::before{
+            content: " ";
+            bottom: 0;
+            right: -10px;
+            position: absolute;
+            height: 10px;
+            width: 20px;
+            background: linear-gradient(-320deg,rgb(156, 218, 179) 0%,rgb(156, 218, 179) 50%, transparent 50%, transparent);            
+        }
     
         form {
             display: flex;
@@ -140,6 +164,7 @@
             padding: 10px;
             outline: none;
             border: 0.3px solid dodgerblue;
+            resize: none;
         }
     
         form textarea::-webkit-scrollbar{
@@ -197,7 +222,13 @@
         }
 
         /* xs */
-        @media (max-width: 475px) {}
+        @media (max-width: 475px) {
+            .child-2 {
+                /* max-height: 100vh; */
+                width: 300px;
+
+            }
+        }
 
 </style>
 <body>
@@ -237,15 +268,6 @@
 <script>
     const form = document.getElementById('message-form');
     const textArea = document.getElementById('msg');
-{% comment %} 
-    textArea.addEventListener('keydown',(e) => {
-        if(e.key === 'Enter' && !e.shiftKey){
-            e.preventDefault();
-            form.submit();
-        }
-    }) {% endcomment %}
-
-
 
     function scrollToBottom() {
         var chatContainer = document.getElementById("chatContainer");
@@ -256,14 +278,17 @@
     const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
     const socket = new WebSocket(wsEndpoint);
 
-    {% comment %} document.getElementById('message-form').addEventListener('submit', function(event){
-        event.preventDefault(); {% endcomment %}
+
         
     textArea.addEventListener('keydown',(e) => {
-            if(e.key === 'Enter' && !e.shiftKey){
-                e.preventDefault();
-            
         const message = document.getElementById('msg').value;
+        console.log(message,"sssssssssssssss")
+            if(e.key === 'Enter' && !e.shiftKey){
+                if(message === ''){
+                    e.preventDefault();
+                    return;
+                }
+                e.preventDefault();
     
         socket.send(
             JSON.stringify({

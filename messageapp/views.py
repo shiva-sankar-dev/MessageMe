@@ -25,3 +25,6 @@ def message(request, room_name, username):
         "messages": get_messages,
     }
     return render(request,"message.html",context)
+
+def main(request):
+    return render(request,"main.html")

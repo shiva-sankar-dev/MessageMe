@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Messages</title>
-    <!-- load static -->
-    {% load static %}
-    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
-    <!-- link to h=css file -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-</head>
+{% extends 'main.html' %}
+{% load static %} 
+{% block content %}
+
 <style>
 
     * {
@@ -25,30 +15,6 @@
           background-color: white;
         }
     
-        nav {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: #659DBD;
-            padding: 10px;
-        }
-    
-        nav ul li {
-            list-style: none;
-            display: inline-block;
-            padding: 10px;
-        }
-    
-        nav ul li:hover {
-            background-color: dodgerblue;
-            color: #fff;
-            transition: 0.8s;
-        }
-    
-        nav ul li a {
-            text-decoration: none;
-            color: #fff;
-        }
     
         .parent {
             height: 100vh;
@@ -59,28 +25,15 @@
         }
 
     
-        .profile-pic {
-            /* height: 80px; */
-            width: 15%;
-            
-            border-radius: 50px;
-            background-color: #fff;
-        }
-    
-        .profile-pic img {
-            width:100%;
-            height:100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-    
         .child-2 {
             /* max-height: 100vh; */
             width: 490px;
             margin: 10px;
+            min-height: 60vh;
             border-radius: 10px;
             padding: 10px;
             background-color: rgba(25,32,43,255);
+            position: relative;
         }
     
         .chat-body-parent {
@@ -88,6 +41,12 @@
             justify-content: center;
             align-items: center;
             /* height: 60vh; */
+        }
+
+        .chat-body{
+            position: absolute;
+            bottom: 0;
+            max-height: 55vh;
         }
     
         .chat-body, .message {
@@ -165,6 +124,7 @@
             outline: none;
             border: 0.3px solid dodgerblue;
             resize: none;
+            align-content:center;
         }
     
         form textarea::-webkit-scrollbar{
@@ -198,6 +158,7 @@
         .sender-name{
             color: white;
             margin-bottom: 15px;
+            font-size: 0.8em;
         }
         
 
@@ -231,7 +192,7 @@
         }
 
 </style>
-<body>
+
     <div class="parent">
         <div class="child-2">
             <center><h3>Online</h3></center>
@@ -244,7 +205,7 @@
                                 <div class="receive">
                                     <p style="color: #000;"> {{i.message}}</p>                                    
                                 </div>
-                                <p class="sender-name">{{i.sender | capfirst }}</p>
+                                <p class="sender-name"> @{{i.sender | capfirst }}</p>
                             {% else %}
                                 <div class="send">
                                     <p style="color: #000;">{{i.message}}</p>
@@ -264,7 +225,6 @@
             </div>
         </div>
     </div>
-</body>
 <script>
     const form = document.getElementById('message-form');
     const textArea = document.getElementById('msg');
@@ -316,7 +276,7 @@
         // Here's where we append the message to the chatbox.
         var messageDiv = document.querySelector('.message');
         if (sender != '{{user}}') { // assuming you have a variable `currentUser` to hold the current user's name
-            messageDiv.innerHTML += '<div class="receive"><p style="color:#000;">' + message + '</p></div> <p class="sender-name"> ' + sender  + '</p>';
+            messageDiv.innerHTML += '<div class="receive"><p style="color:#000;">' + message + '</p></div> <p class="sender-name"> ' + '@' + sender  + '</p>';
         } else {
             messageDiv.innerHTML += '<div class="send"><p style="color: #000;">' + message + '</p></div>';
         }
@@ -331,5 +291,4 @@
 
 
 </script>
-
-</html>
+{% endblock content %}

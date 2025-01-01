@@ -43,6 +43,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_message(self, data):
         get_room_by_name = Room.objects.get(room_name=data['room_name'])
+        sender_profile = Profile.objects.get(user__username=data['sender'])
         if not Message.objects.filter(message=data['message']).exists():
-            new_message = Message(room=get_room_by_name, sender=data['sender'], message=data['message'])
+            new_message = Message(room=get_room_by_name, sender=sender_profile, message=data['message'])
             new_message.save()

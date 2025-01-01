@@ -3,8 +3,10 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,logout,login
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url="loginpage")
 def room(request):
     user = request.user
     if request.method == 'POST':
@@ -19,12 +21,14 @@ def room(request):
             
     return render(request,"index.html")
 
+@login_required(login_url="loginpage")
 def message(request, room_name, username):
     get_room = Room.objects.get(room_name=room_name)
     get_messages = Message.objects.filter(room=get_room)
+    get_username = Profile.objects.get(user__username=username)
     context = {
         "room_name":room_name,
-        "user":username,
+        "user":get_username.user.username,
         "messages": get_messages,
     }
     return render(request,"message.html",context)
@@ -67,4 +71,5 @@ def registration(request):
     return render(request,"loginpage.html")
 
 def logout_page(request):
+    logout(request)
     return render(request,"loginpage.html")

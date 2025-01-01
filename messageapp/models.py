@@ -19,7 +19,8 @@ class Room(models.Model):
     
 class Message(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    sender = models.CharField(max_length=255)
+    # sender = models.CharField(max_length=255)
+    sender = models.ForeignKey(Profile,on_delete=models.CASCADE)
     message = models.TextField()
     
     def __str__(self):

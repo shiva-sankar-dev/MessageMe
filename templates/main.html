@@ -23,9 +23,9 @@
         body {
             margin: 0;
             padding: 0;
-            height: 100vh; /* Ensure the height is 100% of the viewport */
+            height: 100vh; 
             display: flex;
-            flex-direction: column; /* Arrange items vertically */
+            flex-direction: column; 
         }   
 
         nav {
@@ -152,10 +152,10 @@
             </div>
 
             <ul class="dropmenu">
-                <li class="user-name-menu"><img src="{% static 'images/profile.png' %}" alt=""><a>  Username</a>
+                <li class="user-name-menu"><img src="{{ dp.url }}" alt=""><a>  {{ viewusername }}</a>
                     <div class="dropdown-menu">
                         <ul>
-                            <li><a href="">Logout</a></li>
+                            <li><a href="{% url 'logout_page' %}">Logout</a></li>
                         </ul>
                     </div>
                 </li>

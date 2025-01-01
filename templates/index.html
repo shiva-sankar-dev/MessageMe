@@ -115,8 +115,8 @@
             <h1 style="font-weight:900;">Enter Room</h1>
             <form action="" method="POST">
                 {% csrf_token %}
-                <label for="">Username</label><br>
-                <input type="text" placeholder="Username" name="username" required><br>
+                {% comment %} <label for="">Username</label><br>
+                <input type="text" placeholder="Username" name="username" required><br> {% endcomment %}
                 <label for="">Room name</label><br>
                 <input type="text" placeholder="room name" name="room" required><br>
                 <center><button type="submit">Submit</button></center><br>

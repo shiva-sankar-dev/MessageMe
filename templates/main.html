@@ -86,6 +86,11 @@
             cursor: pointer;
         }
 
+        .logo img{
+            height: 50px;
+            width: 50px;
+        }
+
         ul{
             list-style: none;
         }
@@ -148,11 +153,11 @@
     <header>
         <nav>
             <div class="logo">
-                Message
+                <img src="/static/images/chat-icon.png" alt="">
             </div>
 
             <ul class="dropmenu">
-                <li class="user-name-menu"><img src="{{ dp.url }}" alt=""><a>  {{ viewusername }}</a>
+                <li class="user-name-menu"><img src="{{ dp.url }}" alt=""><a>  {{ viewusername | capfirst }}</a>
                     <div class="dropdown-menu">
                         <ul>
                             <li><a href="{% url 'logout_page' %}">Logout</a></li>

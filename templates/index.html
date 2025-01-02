@@ -43,7 +43,7 @@
     input {
         padding: 10px;
         border: 1px solid dodgerblue;
-        width: 100%;
+        width: 95%;
         margin: 10px;
         border-radius: 5px;
     }
@@ -117,7 +117,7 @@
                 {% csrf_token %}
                 {% comment %} <label for="">Username</label><br>
                 <input type="text" placeholder="Username" name="username" required><br> {% endcomment %}
-                <label for="">Room name</label><br>
+                {% comment %} <label for="">Room name</label><br> {% endcomment %}
                 <input type="text" placeholder="room name" name="room" required><br>
                 <center><button type="submit">Submit</button></center><br>
             </form>

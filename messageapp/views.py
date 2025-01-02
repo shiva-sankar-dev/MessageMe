@@ -26,9 +26,10 @@ def message(request, room_name, username):
     get_room = Room.objects.get(room_name=room_name)
     get_messages = Message.objects.filter(room=get_room)
     get_username = Profile.objects.get(user__username=username)
+    print("lllllllllllllllllllllll",get_username.user.id)
     context = {
         "room_name":room_name,
-        "user":get_username.user.username,
+        "user":get_username.user.id,
         "messages": get_messages,
     }
     return render(request,"message.html",context)

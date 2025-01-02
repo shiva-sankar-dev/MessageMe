@@ -72,7 +72,7 @@
             word-spacing: normal;
             border-radius: 10px;
             padding: 10px;
-            margin-bottom: 2px;            
+            margin-bottom: 10px;            
             align-self: flex-start;
             position: relative;
         }
@@ -167,6 +167,7 @@
             border-radius: 50%;
             margin-right: 8px;
             object-fit: cover;
+            margin-bottom: 10px;
         }
 
             /* 2xl */
@@ -208,11 +209,11 @@
                     <div class="message" id="chatContainer">
                       <!-- received messages and displayed here -->
                         {% for i in messages %}
-                            {% if i.sender != user %}
+                            {% if i.sender.id != user %}
                             <span style="display: flex;align-items: end;">
-                                <img src="/media/i.sender.profile_picture" alt="">
+                                <img src="/media/{{ i.sender.profile_picture }}" alt="">
                                 <div class="receive">
-                                    <p class="sender-name"> {{i.sender | capfirst }}</p>
+                                    <p class="sender-name"> {{i.sender.user.first_name | capfirst }}</p>
                                     <p style="color: #000;"> {{i.message}}</p>                                    
                                 </div>
                             </span>
@@ -266,7 +267,10 @@
             JSON.stringify({
                 'message': message,
                 'room_name': '{{room_name}}',
-                'sender': '{{ request.user.username }}',
+                'sender': {
+                    "id":'{{ request.user.id }}',
+                    "username":'{{ request.user.username }}'
+                },
             })
         )
         }
@@ -277,18 +281,18 @@
         const messageData = JSON.parse(event.data)['message'];
         console.log(messageData);
         
-        var sender = messageData['sender'];
+        var senderId = messageData['sender']['id'];
+        var senderUsername = messageData['sender']['username'];
         var message = messageData['message'];
-
         // empty message input field after message has been sent
-        if (sender == "{{user}}"){
+        if (senderId == "{{ user }}"){
             document.getElementById('msg').value = '';
         }
 
         // Here's where we append the message to the chatbox.
         var messageDiv = document.querySelector('.message');
-        if (sender != '{{user}}') { // assuming you have a variable `currentUser` to hold the current user's name
-            messageDiv.innerHTML += '<div class="receive"><p style="color:#000;">' + message + '</p></div> <p class="sender-name"> ' + sender  + '</p>';
+        if (senderId != '{{ user }}') { // assuming you have a variable `currentUser` to hold the current user's name
+            messageDiv.innerHTML += '<div class="receive"><p style="color:#000;">' + message + '</p></div> <p class="sender-name"> ' + senderUsername  + '</p>';
         } else {
             messageDiv.innerHTML += '<div class="send"><p style="color: #000;">' + message + '</p></div>';
         }

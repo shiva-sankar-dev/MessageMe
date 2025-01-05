@@ -22,7 +22,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json
-        print(message,"DDDDDDDDDDDDDDDDDDDDDDDDDDD")
         event = {
             'type': 'send_message',
             'message': message,
@@ -31,9 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(self.room_name, event)
 
     async def send_message(self, event):
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         data = event['message']
-        print(data,"NNNNNNNNNNNNNNNNNNNN")
         
         await self.create_message(data=data)
         response_data = {
@@ -46,6 +43,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def create_message(self, data):
         get_room_by_name = Room.objects.get(room_name=data['room_name'])
         sender_profile = Profile.objects.get(user__id=data['sender']['id'])
-        if not Message.objects.filter(message=data['message']).exists():
-            new_message = Message(room=get_room_by_name, sender=sender_profile, message=data['message'])
-            new_message.save()
+        # if not Message.objects.filter(message=data['message']).exists():
+        new_message = Message(room=get_room_by_name, sender=sender_profile, message=data['message'])
+        new_message.save()

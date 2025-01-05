@@ -115,6 +115,7 @@
             border-radius: 50%;
             margin-right: 8px;
             object-fit: cover;
+            cursor: pointer;
         }
         
         .dropdown-menu{
@@ -153,13 +154,14 @@
     <header>
         <nav>
             <div class="logo">
-                <img src="/static/images/chat-icon.png" alt="">
+                <a href="{% url 'room' %}"><img src="/static/images/chat-icon.png" alt=""></a>
             </div>
 
             <ul class="dropmenu">
-                <li class="user-name-menu"><img src="{{ dp.url }}" alt=""><a>  {{ viewusername | capfirst }}</a>
+                <li class="user-name-menu"><a href="{% url 'profile' %}"><img src="{{ dp.url }}" alt=""></a><a href="{% url 'profile' %}">  {{ viewusername | capfirst }}</a>
                     <div class="dropdown-menu">
                         <ul>
+                            <li><a href="{% url 'profile' %}">Profile</a></li>
                             <li><a href="{% url 'logout_page' %}">Logout</a></li>
                         </ul>
                     </div>

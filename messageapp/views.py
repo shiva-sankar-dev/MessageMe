@@ -17,19 +17,21 @@ def room(request):
         except Room.DoesNotExist:
             new_room = Room.objects.create(room_name=room)
             new_room.save()
-        return redirect("message",room_name=room,username=user)
+        return redirect("message",room_name=room)
             
     return render(request,"index.html")
 
 @login_required(login_url="loginpage")
-def message(request, room_name, username):
+def message(request, room_name):
+    user = request.user.id
     get_room = Room.objects.get(room_name=room_name)
     get_messages = Message.objects.filter(room=get_room)
-    get_username = Profile.objects.get(user__username=username)
-    print("lllllllllllllllllllllll",get_username.user.id)
+    user_profile_picture = Profile.objects.get(user = user)
+    dp = user_profile_picture.profile_picture
     context = {
         "room_name":room_name,
-        "user":get_username.user.id,
+        "user":user,
+        "dp":dp,
         "messages": get_messages,
     }
     return render(request,"message.html",context)
@@ -46,6 +48,9 @@ def loginpage(request):
         if user is not None:
             login(request,user)
             return redirect("room")
+        else:
+            messages.error(request,"Invalid email or password.")
+            return redirect("loginpage")
     return render(request,"loginpage.html")
 
 def registration(request):
@@ -59,8 +64,8 @@ def registration(request):
         print("Profile Picture:", profile_picture)
         print("Password:", password)
         if User.objects.filter(username = email).exists():
-            messages.error(request, "email already exist")
             print("email already exist")
+            return JsonResponse({"exists":True,"message":"Email already exist"})
         else:
             user_reg = User.objects.create_user(username=email,email=email)
             user_reg.set_password(password)
@@ -74,3 +79,34 @@ def registration(request):
 def logout_page(request):
     logout(request)
     return render(request,"loginpage.html")
+
+login_required(login_url="loginpage")
+def profile(request):
+    if request.user.is_authenticated:   
+        
+        user_details = Profile.objects.get(user = request.user)
+        if request.method == "POST":
+            
+            update_username = request.POST["update_username"]
+            update_email = request.POST["update_email"]
+            update_profile_picture = request.FILES.get("update_profile_picture")
+
+            user_details.user.first_name = update_username
+            user_details.user.email = update_email
+            user_details.user.username = update_email
+            user_details.user.save()
+            if update_profile_picture:
+                user_details.profile_picture = update_profile_picture
+                user_details.save()
+            
+            
+            return redirect("profile")
+        context = {
+            "user_details":user_details,
+        }
+        
+    else:
+        return redirect("loginpage")
+            
+
+    return render(request,"profile.html",context)

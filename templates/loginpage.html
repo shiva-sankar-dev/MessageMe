@@ -42,7 +42,7 @@
             flex-direction: column;
           }
           
-          input ,.label-profile-pic{
+          input{
             display: block;
             outline: none;
             padding: 15px 10px;
@@ -148,12 +148,37 @@
               opacity: 1;
             }
           }
+
+          @media (max-width: 425px) {
+            .form {
+              min-height: 200px;
+              min-width: 300px;
+            }
+            .form button {
+              width: 200px;
+            }
+            input{
+              padding: 15px 10px;
+              margin: 6px;
+              border: solid 1px dodgerblue;
+              background: none;
+              color: black;
+              width: 260px;
+              transition: border-color 1s;
+            }
+            .form button {
+              width: 260px;
+              margin: 6px;
+            }
+          }
           
     </style>
     <div class="form">
         {% for msg in messages %}
-        <p style="color: red;" id="showMessageError">* {{ msg }}</p>
+        <p style="color: red;" id="showLogMessageError">* {{ msg }}</p>
         {% endfor %}
+        <p style="color: red;" id="showMessageError"></p>
+
       <form action="{% url 'loginpage' %}" method="post">
         {% csrf_token %}
         <div class="action">
@@ -161,7 +186,7 @@
           <span class="load" onclick="openRegPage()" id="reg-action">Register</span>
         </div>
         <div class="login show-page">
-          <input type="text" name="log_username" placeholder="Username" />
+          <input type="text" name="log_username" placeholder="E-mail" />
           <input type="password" name="log_password" placeholder="Password" />
           <div class="log-reg">            
               <button type="submit">Login</button>
@@ -195,7 +220,6 @@
     const reg_email = document.getElementById("reg_email").value;
     const reg_profile_picture = document.getElementById("reg_profile_picture").files[0];
     const reg_password = document.getElementById("reg_password").value;
-    console.log("Username:", reg_username, "Email:", reg_email, "File:", reg_profile_picture, "Password:", reg_password);
     const formData = new FormData();
     
     formData.append("reg_username",reg_username);
@@ -216,9 +240,11 @@
             location.reload();
           }
           if(response.exists){
-            console.log("PPPPPPPPPPPPPPPPPPPPPPP")
-            console.log(response.message)
-            showMessageError.innerHTML =  response.message
+
+            showMessageError.innerHTML =  `* ${response.message}`
+            setTimeout(()=>{
+              showMessageError.innerHTML = ""
+            },3000);
           }
         },
         error:function(xhr,status,error){
@@ -226,6 +252,9 @@
         },
       })
     }
+    setTimeout(()=>{
+      document.getElementById("showLogMessageError").innerHTML = ""
+    },3000);
     function openLoginPage() {
       document.querySelector(".reg").classList.remove("show-page");
       document.querySelector(".login").classList.add("show-page");

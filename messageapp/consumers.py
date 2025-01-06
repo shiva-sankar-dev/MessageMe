@@ -25,17 +25,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
         event = {
             'type': 'send_message',
             'message': message,
+            'sender':self.channel_name
         }
 
         await self.channel_layer.group_send(self.room_name, event)
 
     async def send_message(self, event):
         data = event['message']
+        sender_channel = event["sender"]
         
-        await self.create_message(data=data)
+        if self.channel_name == sender_channel:
+            await self.create_message(data=data)
         response_data = {
             'sender': data['sender'],
-            'message': data['message']
+            'message': data['message'],
+            'profile_picture': data['profilePic'],
         }
         await self.send(text_data=json.dumps({'message': response_data}))
 
@@ -43,6 +47,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def create_message(self, data):
         get_room_by_name = Room.objects.get(room_name=data['room_name'])
         sender_profile = Profile.objects.get(user__id=data['sender']['id'])
-        # if not Message.objects.filter(message=data['message']).exists():
         new_message = Message(room=get_room_by_name, sender=sender_profile, message=data['message'])
         new_message.save()

@@ -254,7 +254,6 @@
         
     textArea.addEventListener('keydown',(e) => {
         const message = document.getElementById('msg').value;
-        console.log(message,"sssssssssssssss")
             if(e.key === 'Enter' && !e.shiftKey){
                 if(message === ''){
                     e.preventDefault();
@@ -270,7 +269,7 @@
                 'sender': {
                     "id":'{{ request.user.id }}',
                     "username":'{{ request.user.username }}',
-                    "firstname":'{{ request.user.first_name }}'
+                    "firstname":'{{ request.user.first_name }}',
                 },
             })
         )
@@ -279,11 +278,11 @@
 
     socket.addEventListener("message", (event) => {
         const messageData = JSON.parse(event.data)['message'];
-        console.log(messageData);
         
         var senderId = messageData['sender']['id'];
         var senderUsername = messageData['sender']['firstname'];
         var message = messageData['message'];
+        var senderProfilePicture  = messageData['profile_picture'];
         if (senderId == "{{ user }}"){
             document.getElementById('msg').value = '';
         }
@@ -293,7 +292,7 @@
 
 
 
-            messageDiv.innerHTML += '<span style="display: flex;align-items: end;"><img src="/media/{{ dp }}" alt=""><div class="receive"><p class="sender-name"> ' + senderUsername  + '</p><p style="color:#000;">' + message + '</p></div></span>';
+            messageDiv.innerHTML += `<span style="display: flex;align-items: end;"><img src="/media/${senderProfilePicture}" alt=""><div class="receive"><p class="sender-name"> ${senderUsername} </p><p style="color:#000;">${message}</p></div></span>`;
         } else {
             messageDiv.innerHTML += '<div class="send"><p style="color: #000;">' + message + '</p></div>';
         }

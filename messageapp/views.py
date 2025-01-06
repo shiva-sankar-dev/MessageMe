@@ -43,10 +43,9 @@ def loginpage(request):
     if request.method == "POST":
         username = request.POST["log_username"]
         log_password = request.POST["log_password"]
-        print("Username:", username)
         user = authenticate(request, username=username,password = log_password)
         if user is not None:
-            login(request,user)
+            login(request,user) 
             return redirect("room")
         else:
             messages.error(request,"Invalid email or password.")
@@ -59,12 +58,7 @@ def registration(request):
         email = request.POST.get("reg_email")
         profile_picture = request.FILES.get("reg_profile_picture")
         password = request.POST.get("reg_password")
-        print("Username:", username)
-        print("Email:", email)
-        print("Profile Picture:", profile_picture)
-        print("Password:", password)
         if User.objects.filter(username = email).exists():
-            print("email already exist")
             return JsonResponse({"exists":True,"message":"Email already exist"})
         else:
             user_reg = User.objects.create_user(username=email,email=email)

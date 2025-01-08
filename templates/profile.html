@@ -145,7 +145,7 @@
       {% csrf_token %}
         <div class="update-form">
             <p>update profile</p>
-          <input type="text" value="{{ user_details.user.first_name | capfirst }}" name="update_username" id="update_username" placeholder="Username" required />
+          <input type="text" value="{{ user_details.user.first_name | capfirst }}" pattern="^[a-zA-Z0-9]{3,10}$" title="Username must be 3-20 characters long and can only contain letters, numbers." name="update_username" id="update_username" placeholder="Username" required />
           <input type="email" value="{{ user_details.user.email }}" name="update_email" id="update_email" placeholder="Email" required />
           <label for="update_profile_picture" class="show-profile" id="showProfile">Profile Image</label>
           <img src="" alt="" id="uploadedImage">

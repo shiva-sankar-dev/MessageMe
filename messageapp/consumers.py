@@ -3,10 +3,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import *
 
-
-
-
-
 class ChatConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
@@ -16,16 +12,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_name, self.channel_name)
-        
-        
-        
+
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json
         event = {
             'type': 'send_message',
             'message': message,
-            'sender':self.channel_name
+            'sender': self.channel_name,
         }
 
         await self.channel_layer.group_send(self.room_name, event)
@@ -46,6 +40,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_message(self, data):
         get_room_by_name = Room.objects.get(room_name=data['room_name'])
-        sender_profile = Profile.objects.get(user__id=data['sender']['id'])
+        sender_user = User.objects.get(id=data['sender']['id'])
+        
+        # Handle superuser case
+        if sender_user.is_superuser:
+            return
+        
+        # Ensure Profile exists
+        sender_profile, created = Profile.objects.get_or_create(user=sender_user)
+
+        # Save the message
         new_message = Message(room=get_room_by_name, sender=sender_profile, message=data['message'])
         new_message.save()

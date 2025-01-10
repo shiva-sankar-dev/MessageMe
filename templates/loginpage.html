@@ -200,7 +200,7 @@
             <input type="text" name="reg_username" id="reg_username" placeholder="Username" />
             <input type="email" name="reg_email" id="reg_email" placeholder="Email" />
             {% comment %} <label for="reg_profile_picture" class="label-profile-pic" ><i class="fa-solid fa-upload" style="padding-right: 5px;"></i>Profile Picure</label> {% endcomment %}
-            <input type="file" name="reg_profile_picture" id="reg_profile_picture" placeholder="Profile Picture" />
+            <input style="display: none;" type="file" name="reg_profile_picture" id="reg_profile_picture" placeholder="Profile Picture" />
             <input type="password" name="reg_password" id="reg_password" placeholder="Password" />
             <div class="log-reg">  
                 <button type="button" name="registration_btn" onclick="registrationBtn()">Register</button>
@@ -218,13 +218,11 @@
     const reg_username = document.getElementById("reg_username").value;
     const showMessageError = document.getElementById("showMessageError");
     const reg_email = document.getElementById("reg_email").value;
-    const reg_profile_picture = document.getElementById("reg_profile_picture").files[0];
     const reg_password = document.getElementById("reg_password").value;
     const formData = new FormData();
     
     formData.append("reg_username",reg_username);
     formData.append("reg_email",reg_email);
-    formData.append("reg_profile_picture",reg_profile_picture);
     formData.append("reg_password",reg_password);
     formData.append("csrfmiddlewaretoken","{{ csrf_token }}");
     

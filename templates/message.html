@@ -208,7 +208,7 @@
                     <div class="message" id="chatContainer">
 
                         {% for i in messages %}
-                            {% if i.sender.id != user %}
+                            {% if i.sender.user.id != user %}
                             <span style="display: flex;align-items: end;">
                                 <img src="/media/{{ i.sender.profile_picture }}" alt="">
                                 <div class="receive">
